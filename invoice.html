@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>QRIS Payment</title>
+<title>Pembayaran QRIS</title>
 <link href="style.css" rel="stylesheet">
 </head>
 <body>
@@ -10,7 +10,7 @@
 <div class="box">
     <h2>Pembayaran QRIS</h2>
 
-    <!-- QRIS -->
+    <!-- QRIS Image -->
     <img id="qrimg" class="qr" alt="QRIS">
 
     <div class="detail">
@@ -63,14 +63,11 @@ function updateTimer(){
 const timerInterval = setInterval(updateTimer,1000);
 updateTimer();
 
-// ===== STATUS CHECK =====
+// ===== STATUS CHECK VIA SERVERLESS PROXY =====
 async function checkStatus(){
-    try {
-        const res = await fetch(`https://api.pakasir.com/anon-payment/qris/status?id=${id}`, {
-            headers: { "apikey": "lPOX2W6MqhFETsfkvVwfBTjDNUlsj1xK" }
-        });
+    try{
+        const res = await fetch(`/api/status?id=${id}`);
         const data = await res.json();
-
         let status = data.status || "MEMPROSES";
         document.getElementById("sts").innerText = status;
 
@@ -80,11 +77,11 @@ async function checkStatus(){
         }
     } catch(e){
         console.error("Error cek status:", e);
-        document.getElementById("sts").innerText = "ERROR";
+        document.getElementById("sts").innerText="ERROR";
     }
 }
 
-// auto cek tiap 5 detik
+// auto cek status tiap 5 detik
 setInterval(checkStatus,5000);
 </script>
 </body>
