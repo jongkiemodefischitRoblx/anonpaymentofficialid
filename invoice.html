@@ -26,6 +26,7 @@
 </div>
 
 <script>
+const SLUG = "anon-payment"; // Masukin slug QRIS API
 const q = new URLSearchParams(location.search);
 const id = q.get("id"); 
 const amount = q.get("amount");
@@ -33,8 +34,8 @@ const amount = q.get("amount");
 document.getElementById("inv").innerText = id;
 document.getElementById("amt").innerText = amount;
 
-// QRIS real-time
-document.getElementById("qrimg").src = `https://api.pakasir.com/anon-payment/qris/${id}.png`;
+// QRIS real-time pakai slug
+document.getElementById("qrimg").src = `https://api.pakasir.com/${SLUG}/qris/${id}.png`;
 
 // ===== LOCALSTORAGE TIMER =====
 const TIMER_KEY = `invoice_timer_${id}`;
@@ -66,7 +67,7 @@ updateTimer();
 // ===== STATUS CHECK VIA SERVERLESS PROXY =====
 async function checkStatus(){
     try{
-        const res = await fetch(`/api/status?id=${id}`);
+        const res = await fetch(`/api/status?id=${id}&slug=${SLUG}`);
         const data = await res.json();
         let status = data.status || "MEMPROSES";
         document.getElementById("sts").innerText = status;
@@ -81,7 +82,6 @@ async function checkStatus(){
     }
 }
 
-// auto cek status tiap 5 detik
 setInterval(checkStatus,5000);
 </script>
 </body>
